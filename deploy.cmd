@@ -208,7 +208,7 @@ IF EXIST "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%\Gruntfile.js" (
 
 ::8. Move web.config up from the app
 IF EXIST "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%\web.config" (
-  pushd "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%\web.config"
+  pushd "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%"
   move web.config ..\
   popd
   IF !ERRORLEVEL! NEQ 0 goto error
