@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  if true === true
+    h2 Environment Variables
+
+    table
+      thead
+        tr
+          th Variable
+          th Value
+      tbody
+        for value, name in process.env
+          tr
+            td= name
+            td= value
+
