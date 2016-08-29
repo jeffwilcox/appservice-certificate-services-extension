@@ -206,9 +206,17 @@ IF EXIST "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%\Gruntfile.js" (
   popd
 )
 
-:: 8. KuduSync
+::8. Move web.config up from the app
+IF EXIST "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%\web.config" (
+  pushd "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%\web.config"
+  move web.config ..\
+  popd
+  IF !ERRORLEVEL! NEQ 0 goto error
+)
+
+:: 9. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%\app" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
+  call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_SOURCE%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
