@@ -115,7 +115,7 @@ SET CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG=CertificateServices\applicationHo
 SET CERTIFICATE_SERVICE_PROJECT=CertificateServices\Certificates\Certificates.csproj
 SET CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT=1
 
-IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SOLUTION%" NEQ "" (
+REM IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SOLUTION%" NEQ "" (
   echo Local application services installing...
 
   :: 1. Restore NuGet packages
@@ -130,6 +130,7 @@ IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SO
   ) ELSE (
     call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%\\" %SCM_BUILD_ARGS%
   )
+
   IF !ERRORLEVEL! NEQ 0 goto error
 
   :: 3. ApplicationHost.config light-up for our extensions
@@ -142,7 +143,7 @@ IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SO
     popd
   )
 
-)
+REM )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
