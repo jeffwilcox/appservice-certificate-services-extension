@@ -25,6 +25,14 @@ namespace AppService.CertificateServices.Models
         public string Subject { get; private set; }
         public string Thumbprint { get; private set; }
 
+        public int DaysUntilExpiration
+        {
+            get
+            {
+                TimeSpan difference = NotAfter.Subtract(DateTime.UtcNow);
+                return (int)Math.Floor(difference.TotalDays);
+            }
+        }
 
         public static Certificate FromX509Certificate2(X509Certificate2 cert)
         {
