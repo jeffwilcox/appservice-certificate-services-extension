@@ -58,47 +58,5 @@ namespace AppService.CertificateServices.CertificateService.Controllers
             }
             return Certificate.FromX509Certificate2(cert);
         }
-
-        private string CreateResourceString(string resource)
-        {
-            // Assumption:
-            // Note that the Active Directory library does not take an object of type Uri,
-            // but rather string. We do assume that a resource is a Uri, and if we construct
-            // it, we require that it be an SSL endpoint. If that fails, it is returned
-            // as-is.
-            Uri resourceUri;
-            if (Uri.TryCreate(resource, UriKind.Absolute, out resourceUri))
-            {
-                return resource;
-            }
-
-            string endpoint = string.Format(CultureInfo.InvariantCulture, "https://{0}", resource);
-            if (Uri.TryCreate(endpoint, UriKind.Absolute, out resourceUri))
-            {
-                if (resourceUri.Scheme == Uri.UriSchemeHttps)
-                {
-                    return endpoint;
-                }
-            }
-            return resource;
-        }
-
-        [HttpPost]
-        public async Task<LightweightAuthenticationResult> AuthorizeClient(string thumbprints, string tenantId, string clientId, string resource)
-        {
-            var cert = certificates.GetBestValidByThumbprints(thumbprints, AllowTestCertificates);
-            if (cert == null)
-            {
-                throw new InvalidOperationException("The certificate is not available.");
-            }
-
-            ClientAssertionCertificate certCred = new ClientAssertionCertificate(clientId, cert);
-            string authority = string.Format(CultureInfo.InvariantCulture, MicrosoftOnlineAuthorityEndpoint, tenantId);
-            AuthenticationContext authContext = new AuthenticationContext(authority, true, TokenCache.DefaultShared);
-
-            string resourceIdentifier = CreateResourceString(resource);
-            AuthenticationResult result = await authContext.AcquireTokenAsync(resourceIdentifier, certCred);
-            return new LightweightAuthenticationResult(result);
-        }
     }
 }

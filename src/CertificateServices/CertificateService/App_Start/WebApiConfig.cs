@@ -37,15 +37,17 @@ namespace AppService.CertificateServices.CertificateService
                 routeTemplate: "",
                defaults: new { controller = "Home" }
            );
+
             config.Routes.MapHttpRoute(
-                name: "CertificatesActionRoute",
+                name: "TokensActionRoute",
                 routeTemplate: "certificates/{thumbprints}/tenant/{tenantId}/client/{clientId}/resource/{resource}/authenticate",
                 defaults: new
                 {
-                    controller = "Certificates",
+                    controller = "Tokens",
                     action = "AuthorizeClient",
                 }
             );
+
             config.Routes.MapHttpRoute(
                 name: "CertificatesRoute",
                 routeTemplate: "certificates/{thumbprints}",
