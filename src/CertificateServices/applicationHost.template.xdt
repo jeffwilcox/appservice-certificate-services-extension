@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <system.applicationHost>
+    <sites>
+      <site name="%XDT_SITENAME%" xdt:Locator="Match(name)">
+        <application path="/[DeploymentGuid]" applicationPool="%XDT_SITENAME%" xdt:Transform="Insert">
+          <virtualDirectory path="/" physicalPath="%HOME%\site\wwwroot\services\keyvault\NodeKeyVaultCertificateExtension" />
+        </application>
+      </site>
+    </sites>
+  </system.applicationHost>
+  <location path="%XDT_SITENAME%" xdt:Locator="Match(path)">
+    <system.webServer>
+      <runtime xdt:Transform="InsertIfMissing">
+        <environmentVariables xdt:Transform="InsertIfMissing">
+          <add name="CERTIFICATE_LOCAL_SERVICE_FILENAME" value="redhawk.txt" xdt:Transform="InsertIfMissing"/>
+        </environmentVariables>
+      </runtime>
+      <rewrite xdt:Transform="InsertIfMissing">
+        <rules xdt:Transform="InsertIfMissing">
+          <rule name="SubApp" patternSyntax="ECMAScript" stopProcessing="true" xdt:Transform="InsertIfMissing">
+            <match url="^[DeploymentGuid][\/]?" xdt:Transform="InsertIfMissing" />
+          </rule>
+        </rules>
+      </rewrite>
+    </system.webServer>
+  </location>
+  <location path="%XDT_SCMSITENAME%" xdt:Locator="Match(path)">
+    <system.webServer>
+      <runtime xdt:Transform="InsertIfMissing">
+        <environmentVariables xdt:Transform="InsertIfMissing">
+          <add name="CERTIFICATE_LOCAL_SERVICE_FILENAME" value="[secret value]" xdt:Transform="InsertIfMissing"/>
+        </environmentVariables>
+      </runtime>
+    </system.webServer>
+  </location>
+</configuration>
