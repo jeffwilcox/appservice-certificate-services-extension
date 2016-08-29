@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 
-namespace AppService.CertificateServices.Certificates
+namespace AppService.CertificateServices
 {
     public static class WebApiConfig
     {
@@ -29,9 +29,13 @@ namespace AppService.CertificateServices.Certificates
             );
 
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                name: "CertificatesRoute",
+                routeTemplate: "certificates/{thumbprints}",
+                defaults: new
+                {
+                    controller = "Certificates",
+                    thumbprints = RouteParameter.Optional,
+                }
             );
         }
     }

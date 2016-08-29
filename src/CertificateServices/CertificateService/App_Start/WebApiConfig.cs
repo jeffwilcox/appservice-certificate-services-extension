@@ -11,7 +11,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Routing;
 
-namespace AppService.CertificateServices.CertificateService
+namespace AppService.CertificateServices
 {
     public static class WebApiConfig
     {

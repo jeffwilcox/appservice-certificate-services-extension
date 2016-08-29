@@ -17,7 +17,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
-namespace AppService.CertificateServices.CertificateService
+namespace AppService.CertificateServices
 {
     public class LocalApiKeyAttribute : AuthorizationFilterAttribute
     {

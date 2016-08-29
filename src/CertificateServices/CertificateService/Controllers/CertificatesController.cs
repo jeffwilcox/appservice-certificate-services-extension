@@ -3,8 +3,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for details.
 //
 
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using AppService.CertificateServices.CertificateService.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
