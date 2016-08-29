@@ -108,44 +108,41 @@ goto :EOF
 :: ------------------
 
 :: Certificates Extension
-SET CERTIFICATE_SERVICE_DIRECTORY=\src\
-SET CERTIFICATE_SERVICE_SOLUTION=CertificateServices.sln
-SET CERTIFICATE_SERVICE_PACKAGES=CertificateServices\packages.config
-SET CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG=CertificateServices\applicationHost.xdt
-SET CERTIFICATE_SERVICE_PROJECT=CertificateServices\Certificates\Certificates.csproj
+SET CERTIFICATE_SERVICE_DIRECTORY=\src\CertificateServices\
+SET CERTIFICATE_SERVICE_SOLUTION=\src\CertificateServices.sln
+SET CERTIFICATE_SERVICE_PACKAGES=%CERTIFICATE_SERVICE_DIRECTORY%packages.config
+SET CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG=%CERTIFICATE_SERVICE_DIRECTORY%applicationHost.xdt
+SET CERTIFICATE_SERVICE_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%Certificates\Certificates.csproj
 SET CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT=1
 
-REM IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SOLUTION%" NEQ "" (
-  echo Local application services installing...
+echo Local application services installing...
 
-  :: 1. Restore NuGet packages
-  IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_PACKAGES%" NEQ "" (
-    call :ExecuteCmd nuget restore "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SOLUTION%"
-    IF !ERRORLEVEL! NEQ 0 goto error
-  )
-
-  :: 2. Build to the temporary path
-  IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
-    call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%\\" %SCM_BUILD_ARGS%
-  ) ELSE (
-    call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%\\" %SCM_BUILD_ARGS%
-  )
+:: 1. Restore NuGet packages
+IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_PACKAGES%" NEQ "" (
+  call :ExecuteCmd nuget restore "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_SOLUTION%"
   IF !ERRORLEVEL! NEQ 0 goto error
+)
 
-  :: 3. ApplicationHost.config light-up for our extensions
+:: 2. Build to the temporary path
+IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+) ELSE (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+)
+IF !ERRORLEVEL! NEQ 0 goto error
 
-  echo "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%"
-  echo "%HOME%\site\applicationHost.xdt"
-  IF EXIST "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" (
-    echo Customizing applicationHost.config for the extension...
-    pushd "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%"
+:: 3. ApplicationHost.config light-up for our extensions
+echo "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%"
+echo "%HOME%\site\applicationHost.xdt"
+IF EXIST "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" (
+  echo Customizing applicationHost.config for the extension...
+  pushd "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%"
+  echo copy "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" "%HOME%\site\applicationHost.xdt"
+  copy "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" "%HOME%\site\applicationHost.xdt"
+  IF !ERRORLEVEL! NEQ 0 goto error
+  popd
+)
 
-    copy "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" "%HOME%\site\applicationHost.xdt"
-    IF !ERRORLEVEL! NEQ 0 goto error
-    popd
-  )
-
-REM )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
