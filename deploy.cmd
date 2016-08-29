@@ -111,6 +111,7 @@ goto :EOF
 SET CERTIFICATE_SERVICE_DIRECTORY=\src\
 SET CERTIFICATE_SERVICE_SOLUTION=CertificateServices.sln
 SET CERTIFICATE_SERVICE_PACKAGES=CertificateServices\packages.config
+SET CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG=CertificateServices\applicationHost.xdt
 SET CERTIFICATE_SERVICE_PROJECT=CertificateServices\Certificates\Certificates.csproj
 SET CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT=1
 
@@ -129,8 +130,18 @@ IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_SO
   ) ELSE (
     call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%\\" %SCM_BUILD_ARGS%
   )
-
   IF !ERRORLEVEL! NEQ 0 goto error
+
+  :: 3. ApplicationHost.config light-up for our extensions
+
+  IF EXIST "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" (
+    echo Customizing applicationHost.config for the extension...
+    pushd "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%"
+    copy "%DEPLOYMENT_SOURCE%%NODE_APPLICATION_DIRECTORY%%CERTIFICATE_SERVICE_APPLICATIONHOST_CONFIG%" "%HOME%\site\applicationHost.xdt"
+    IF !ERRORLEVEL! NEQ 0 goto error
+    popd
+  )
+
 )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
