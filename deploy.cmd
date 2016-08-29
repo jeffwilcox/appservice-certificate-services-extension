@@ -101,10 +101,11 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
 
 goto :EOF
 
+:Deployment
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Private Extensions
 :: ------------------
-
 
 :: Certificates Extension
 SET CERTIFICATE_SERVICE_DIRECTORY=\src\
