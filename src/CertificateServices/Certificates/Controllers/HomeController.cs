@@ -20,12 +20,9 @@ namespace AppService.CertificateServices.Certificates.Controllers
         public string Get()
         {
             StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine(string.Format("IsLocal", Request.IsLocal().ToString()));
-
             foreach (var prop in Request.Properties)
             {
-                sb.AppendLine(string.Format("Property: {0}={1}", prop.Key, prop.Value.ToString()));
+                //sb.AppendLine(string.Format("Property: {0}={1}", prop.Key, prop.Value.ToString()));
                 if (prop.Value.ToString() == "MS_HttpContext")
                 {
                     var ctx = prop.Value as HttpContextWrapper;
