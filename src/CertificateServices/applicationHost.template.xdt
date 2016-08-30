@@ -2,14 +2,14 @@
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
   <system.applicationHost>
     <sites>
-      <site name="%XDT_SITENAME%" xdt:Locator="Match(name)">
-        <application path="/__LocalCertificateServicePath__" applicationPool="%XDT_SITENAME%" xdt:Transform="Insert">
-          <virtualDirectory path="/" physicalPath="__LocalCertificateServicePhysicalPath__" />
-        </application>
-      </site>
       <site name="%XDT_SCMSITENAME%" xdt:Locator="Match(name)">
         <application path="/CertificateServices" applicationPool="%XDT_SCMSITENAME%" xdt:Transform="Insert">
           <virtualDirectory path="/" physicalPath="__LocalDeveloperCertificateServicePhysicalPath__" />
+        </application>
+      </site>
+      <site name="%XDT_SITENAME%" xdt:Locator="Match(name)">
+        <application path="/__LocalCertificateServicePath__" applicationPool="%XDT_SITENAME%" xdt:Transform="Insert">
+          <virtualDirectory path="/" physicalPath="__LocalCertificateServicePhysicalPath__" />
         </application>
       </site>
     </sites>
