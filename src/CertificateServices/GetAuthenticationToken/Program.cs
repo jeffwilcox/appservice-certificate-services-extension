@@ -19,12 +19,12 @@ namespace GetAuthenticationToken
 
         static void Main(string[] args)
         {
-            CertificatesRepository certificates = new CertificatesRepository();
             if (args.Length < 4)
             {
                 throw new InvalidOperationException("Not enough arguments specified: [app] thumbprints tenantId clientId resource");
             }
 
+            CertificatesRepository certificates = new CertificatesRepository();
             bool allowTestCertificates = AllowTestCertificatesSetting.AllowTestCertificates;
 
             string thumbprints = args[0];
