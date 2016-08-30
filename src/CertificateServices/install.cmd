@@ -3,6 +3,8 @@ setlocal enabledelayedexpansion
 
 echo Installing extension...
 
+SET > environment_at_install_time.txt
+
 :: Create the certificate services API key folder
 SET CERTIFICATE_SERVICES_API_KEY_FOLDER=%HOME%\site\apikeys
 IF NOT EXIST "%CERTIFICATE_SERVICES_API_KEY_FOLDER%" (
@@ -12,7 +14,11 @@ IF NOT EXIST "%CERTIFICATE_SERVICES_API_KEY_FOLDER%" (
 
 :: Building and configuring local service keys
 SET TRANSLATION_TEMPLATE_FILE=applicationHost.template.xdt
-SET TRANSLATION_OUTPUT_FILE=%HOME%\site\applicationHost.xdt
+IF DEFINED WEBSITE_SKU (
+  SET TRANSLATION_OUTPUT_FILE=.\applicationHost.xdt
+) ELSE (
+  SET TRANSLATION_OUTPUT_FILE=%HOME%\site\applicationHost.xdt.fake
+)
 IF EXIST "%TRANSLATION_TEMPLATE_FILE%" (
   echo Translating and building applicationHost.xdt...
   CALL PowerShell.exe -ExecutionPolicy Bypass -File .\sharedKeyGeneration.ps1

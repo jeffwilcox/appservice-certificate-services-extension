@@ -32,11 +32,11 @@ $replaceValue=$guidPath;
 (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
 
 # Place the extension directory
-$appServiceExtensionPath = $Env:XDT_EXTENSIONPATH;
+$appServiceExtensionPath = $Env:WEBSITE_SKU;
 $isPrivateExtensionDeployment = [string]::IsNullOrEmpty($appServiceExtensionPath);
 
 $localServicePhysicalPath = '%XDT_EXTENSIONPATH%\CertificateService';
-if ($isPrivateExtensionDeployment -eq '1') {
+if ($isPrivateExtensionDeployment) {
   $localServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\CertificateService';
 }
 
@@ -46,7 +46,7 @@ $replaceValue=$localServicePhysicalPath;
 (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
 
 $localDeveloperServicePhysicalPath = '%XDT_EXTENSIONPATH%\Certificates';
-if ($isPrivateExtensionDeployment -eq '1') {
+if ($isPrivateExtensionDeployment) {
   $localDeveloperServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\Certificates';
 }
 $templateFile=$massagedFile;
@@ -67,9 +67,9 @@ Get-ChildItem $apiKeyFolder | Where-Object { $_.LastWriteTime -lt $cutoff } | Re
 
 # Only for private extension use...
 # Write to the app web.config of the main site to kick a definite reboot of the site
-if ($isPrivateExtensionDeployment -eq '1') {
-  $wwwroot = '%HOME%\site\wwwroot'; # installed extensions should use this path
-  if ($isPrivateExtensionDeployment -eq '1') {
+if ($isPrivateExtensionDeployment) {
+  # $wwwroot = '%HOME%\site\wwwroot'; # installed extensions should use this path
+  if ($isPrivateExtensionDeployment) {
     $wwwroot = '..\..\app\';
   }
 
