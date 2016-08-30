@@ -30,8 +30,10 @@ $replaceValue=$guidPath;
 (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
 
 # Place the extension directory
-$isPrivateExtensionDeployment = $Env:IS_PRIVATE_EXTENSION_DEPLOYMENT;
-$localServicePhysicalPath = '%' + 'STILL_NEED_TO_IMPLEMENT_THIS' + '%';
+$appServiceExtensionPath = $Env:XDT_EXTENSIONPATH;
+$isPrivateExtensionDeployment = [string]::IsNullOrEmpty($appServiceExtensionPath);
+
+$localServicePhysicalPath = '%XDT_EXTENSIONPATH%';
 if ($isPrivateExtensionDeployment -eq '1') {
   $localServicePhysicalPath = '%HOME%\site\wwwroot\src\Certificates';
 }
@@ -61,6 +63,6 @@ if ($isPrivateExtensionDeployment -eq '1') {
 $webConfig = Join-Path $wwwroot 'web.config';
 if (Test-Path $webConfig) {
   echo 'Writing to the web.config to kick off a site restart...';
-  $extraContent = '<!--' + '' + '-->';
+  $extraContent = '<!--' + $guidPath.substring(0, 6) + '-->';
   Add-Content $webConfig $extraContent;
 }
