@@ -3,13 +3,14 @@
     <metadata>
         <id>CertificateServices</id>
         <title>Certificate Services</title>
-        <version>1.0.5</version>
+        <version>0.0.1</version>
+        <description>Integrate applications with Azure Active Directory certificate-based authentication for endpoints such as Azure KeyVault. Also exposes a REST endpoint through the Advanced Tools site to explore available certificates.</description>
         <authors>jeffwilcox</authors>
         <licenseUrl>https://github.com/jeffwilcox/appservice-certificate-services-extension/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/jeffwilcox/appservice-certificate-services-extension</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Certificate Services</description>
-        <tags>certificate, certificates, keyvault, authentication, token, aad</tags>
+        <tags>certificate certificates keyvault authentication token aad</tags>
+        <iconUrl>https://raw.githubusercontent.com/jeffwilcox/appservice-certificate-services-extension/master/resources/AppService-CertificateServices-210x210.png</iconUrl>
     </metadata>
     <files>
         <file src="**\*.*" target="content" />
