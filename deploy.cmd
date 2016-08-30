@@ -133,18 +133,11 @@ IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. Run extension uninstall/install
-IF EXIST "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_UNINSTALL%" (
-  echo Uninstalling previous version using the latest uninstall script...
-  pushd "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%"
-  CALL "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_UNINSTALL%"
-  popd
-
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
-
 IF EXIST "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_INSTALL%" (
-  echo Installing extension...
+  echo Installing private extension...
   pushd "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%"
+  :: for local testing only SET HOME=%systemdrive%\z\appservice\home
+  SET IS_PRIVATE_EXTENSION_DEPLOYMENT=1
   CALL "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_INSTALL%"
   popd
 

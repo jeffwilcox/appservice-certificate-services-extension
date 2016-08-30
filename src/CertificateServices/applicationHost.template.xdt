@@ -3,8 +3,8 @@
   <system.applicationHost>
     <sites>
       <site name="%XDT_SITENAME%" xdt:Locator="Match(name)">
-        <application path="/__DeploymentGuid__" applicationPool="%XDT_SITENAME%" xdt:Transform="Insert">
-          <virtualDirectory path="/" physicalPath="%HOME%\site\wwwroot\services\keyvault\NodeKeyVaultCertificateExtension" />
+        <application path="/__LocalCertificateServicePath__" applicationPool="%XDT_SITENAME%" xdt:Transform="Insert">
+          <virtualDirectory path="/" physicalPath="__LocalCertificateServicePhysicalPath__" />
         </application>
       </site>
     </sites>
@@ -13,13 +13,13 @@
     <system.webServer>
       <runtime xdt:Transform="InsertIfMissing">
         <environmentVariables xdt:Transform="InsertIfMissing">
-          <add name="CERTIFICATE_LOCAL_SERVICE_FILENAME" value="certificate-service-__DeploymentGuid__.key" xdt:Transform="InsertIfMissing"/>
+          <add name="CERTIFICATE_LOCAL_SERVICE_FILENAME" value="__LocalCertificateFilename__" xdt:Transform="InsertIfMissing"/>
         </environmentVariables>
       </runtime>
       <rewrite xdt:Transform="InsertIfMissing">
         <rules xdt:Transform="InsertIfMissing">
           <rule name="SubApp" patternSyntax="ECMAScript" stopProcessing="true" xdt:Transform="InsertIfMissing">
-            <match url="^__DeploymentGuid__[\/]?" xdt:Transform="InsertIfMissing" />
+            <match url="^__LocalCertificateServicePath__[\/]?" xdt:Transform="InsertIfMissing" />
           </rule>
         </rules>
       </rewrite>
