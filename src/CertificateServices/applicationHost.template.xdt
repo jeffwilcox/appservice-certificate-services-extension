@@ -7,6 +7,11 @@
           <virtualDirectory path="/" physicalPath="__LocalCertificateServicePhysicalPath__" />
         </application>
       </site>
+      <site name="%XDT_SCMSITENAME%" xdt:Locator="Match(name)">
+        <application path="/certificates" applicationPool="%XDT_SITENAME%" xdt:Transform="Insert">
+          <virtualDirectory path="/" physicalPath="__LocalDeveloperCertificateServicePhysicalPath__" />
+        </application>
+      </site>
     </sites>
   </system.applicationHost>
   <location path="%XDT_SITENAME%" xdt:Locator="Match(path)">

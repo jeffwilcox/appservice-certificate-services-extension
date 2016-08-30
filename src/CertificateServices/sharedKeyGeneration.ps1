@@ -37,13 +37,24 @@ $isPrivateExtensionDeployment = [string]::IsNullOrEmpty($appServiceExtensionPath
 
 $localServicePhysicalPath = '%XDT_EXTENSIONPATH%';
 if ($isPrivateExtensionDeployment -eq '1') {
-  $localServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\Certificates';
+  $localServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\CertificateService';
 }
 
 $templateFile=$massagedFile;
 $replaceMarker="__LocalCertificateServicePhysicalPath__";
 $replaceValue=$localServicePhysicalPath;
 (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
+
+$localDeveloperServicePhysicalPath = '%XDT_EXTENSIONPATH%';
+if ($isPrivateExtensionDeployment -eq '1') {
+  $localDeveloperServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\Certificates';
+}
+
+$templateFile=$massagedFile;
+$replaceMarker="__LocalDeveloperCertificateServicePhysicalPath__";
+$replaceValue=$localDeveloperServicePhysicalPath;
+(Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
+
 
 $templateFile=$massagedFile;
 $replaceMarker="__LocalCertificateFilename__";
