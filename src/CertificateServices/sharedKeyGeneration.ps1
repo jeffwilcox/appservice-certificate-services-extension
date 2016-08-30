@@ -5,6 +5,8 @@
 
 # TODO: implement the extension version of this
 
+# Do not store analysis information locally (cleans up kudu display)
+$env:PSModuleAnalysisCachePath = 'nul'
 
 # Generate a new API key
 [Reflection.Assembly]::LoadWithPartialName("System.Security");
