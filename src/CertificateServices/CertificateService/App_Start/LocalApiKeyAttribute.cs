@@ -44,6 +44,12 @@ namespace AppService.CertificateServices
             return null;
         }
 
+        public override Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
+        {
+            OnAuthorization(actionContext);
+            return null;
+        }
+
         public override void OnAuthorization(HttpActionContext actionContext)
         {
             bool ok = false;
