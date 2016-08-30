@@ -116,6 +116,7 @@ popd
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Run extension uninstall/install
+echo does exist "%DEPLOYMENT_SOURCE%src\CertificateServices\install.cmd"
 IF EXIST "%DEPLOYMENT_SOURCE%src\CertificateServices\install.cmd" (
   echo Installing private extension...
   echo pushd "%DEPLOYMENT_SOURCE%src\CertificateServices\"
