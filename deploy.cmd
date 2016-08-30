@@ -114,6 +114,7 @@ SET CERTIFICATE_SERVICE_PACKAGES=%CERTIFICATE_SERVICE_DIRECTORY%packages.config
 SET CERTIFICATE_SERVICE_UNINSTALL=%CERTIFICATE_SERVICE_DIRECTORY%uninstall.cmd
 SET CERTIFICATE_SERVICE_INSTALL=%CERTIFICATE_SERVICE_DIRECTORY%install.cmd
 SET CERTIFICATE_SERVICE_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%Certificates\Certificates.csproj
+SET CERTIFICATE_SERVICE_CONSOLE_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%GetAuthenticationToken\GetAuthenticationToken.csproj
 SET CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT=1
 
 echo Local application services installing...
@@ -132,7 +133,15 @@ IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
 )
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: 3. Run extension uninstall/install
+:: 3. Build the console app
+IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%CERTIFICATE_SERVICE_CONSOLE_PROJECT" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+) ELSE (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%CERTIFICATE_SERVICE_CONSOLE_PROJECT" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+)
+IF !ERRORLEVEL! NEQ 0 goto error
+
+:: 4. Run extension uninstall/install
 IF EXIST "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_INSTALL%" (
   echo Installing private extension...
   pushd "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%"
