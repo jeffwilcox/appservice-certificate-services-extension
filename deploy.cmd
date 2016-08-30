@@ -116,11 +116,12 @@ popd
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Run extension uninstall/install
-IF EXIST "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_INSTALL%" (
+IF EXIST "%DEPLOYMENT_SOURCE%CertificateServices\install.cmd" (
   echo Installing private extension...
-  pushd "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_DIRECTORY%"
+  echo pushd "%DEPLOYMENT_SOURCE%CertificateServices"
+  pushd "%DEPLOYMENT_SOURCE%CertificateServices"
   :: for local testing only SET HOME=%systemdrive%\z\appservice\home
-  CALL "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_INSTALL%"
+  CALL "install.cmd"
   popd
 
   IF !ERRORLEVEL! NEQ 0 goto error

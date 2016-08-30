@@ -5,7 +5,6 @@ echo Installing extension...
 
 :: Create the certificate services API key folder
 SET CERTIFICATE_SERVICES_API_KEY_FOLDER=%HOME%\site\apikeys
-
 IF NOT EXIST "%CERTIFICATE_SERVICES_API_KEY_FOLDER%" (
   echo Creating the local API key folder: %CERTIFICATE_SERVICES_API_KEY_FOLDER%
   mkdir "%CERTIFICATE_SERVICES_API_KEY_FOLDER%"
