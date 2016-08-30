@@ -107,6 +107,8 @@ goto :EOF
 :: Private Extensions
 :: ------------------
 
+echo Private extension building and installing app services...
+
 :: Certificates Extension
 SET CERTIFICATE_SERVICE_DIRECTORY=\src\CertificateServices\
 SET CERTIFICATE_SERVICE_SOLUTION=\src\CertificateServices.sln
@@ -117,8 +119,6 @@ SET CERTIFICATE_SERVICE_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%CertificateServic
 SET CERTIFICATES_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%Certificates\Certificates.csproj
 SET CERTIFICATE_SERVICE_CONSOLE_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%GetAuthenticationToken\GetAuthenticationToken.csproj
 SET CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT=1
-
-echo Local application services installing...
 
 :: 1. Restore NuGet packages
 IF /I "%DEPLOYMENT_SOURCE%%CERTIFICATE_SERVICE_PACKAGES%" NEQ "" (
