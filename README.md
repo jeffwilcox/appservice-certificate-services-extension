@@ -19,7 +19,7 @@ endpoint.
 
 ## License
 
-[LICENSE](MIT License)
+[MIT License](LICENSE)
 
 ## Code of Conduct
 
