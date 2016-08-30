@@ -35,7 +35,7 @@ $replaceValue=$guidPath;
 $appServiceExtensionPath = $Env:XDT_EXTENSIONPATH;
 $isPrivateExtensionDeployment = [string]::IsNullOrEmpty($appServiceExtensionPath);
 
-$localServicePhysicalPath = '%XDT_EXTENSIONPATH%';
+$localServicePhysicalPath = '%XDT_EXTENSIONPATH%\CertificateService';
 if ($isPrivateExtensionDeployment -eq '1') {
   $localServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\CertificateService';
 }
@@ -45,16 +45,14 @@ $replaceMarker="__LocalCertificateServicePhysicalPath__";
 $replaceValue=$localServicePhysicalPath;
 (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
 
-$localDeveloperServicePhysicalPath = '%XDT_EXTENSIONPATH%';
+$localDeveloperServicePhysicalPath = '%XDT_EXTENSIONPATH%\Certificates';
 if ($isPrivateExtensionDeployment -eq '1') {
   $localDeveloperServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\Certificates';
 }
-
 $templateFile=$massagedFile;
 $replaceMarker="__LocalDeveloperCertificateServicePhysicalPath__";
 $replaceValue=$localDeveloperServicePhysicalPath;
 (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
-
 
 $templateFile=$massagedFile;
 $replaceMarker="__LocalCertificateFilename__";
@@ -67,20 +65,23 @@ $now = Get-Date
 $cutoff = $now.AddDays($days)
 Get-ChildItem $apiKeyFolder | Where-Object { $_.LastWriteTime -lt $cutoff } | Remove-Item
 
+# Only for private extension use...
 # Write to the app web.config of the main site to kick a definite reboot of the site
-$wwwroot = '%HOME%\site\wwwroot'; # installed extensions should use this path
 if ($isPrivateExtensionDeployment -eq '1') {
-  $wwwroot = '..\..\app\';
-}
+  $wwwroot = '%HOME%\site\wwwroot'; # installed extensions should use this path
+  if ($isPrivateExtensionDeployment -eq '1') {
+    $wwwroot = '..\..\app\';
+  }
 
-$webConfig = Join-Path $wwwroot 'web.template.config';
-if (Test-Path $webConfig) {
-  echo 'Writing to the web.config to kick off a site restart...';
-
-  $massagedFile=Join-Path $wwwroot 'web.config';
-  $templateFile=$webConfig;
-  $replaceMarker='__automatic_reboot_segment__';
-  $replaceValue=$guidPath.substring(0, 6);
   $webConfig = Join-Path $wwwroot 'web.template.config';
-  (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
+  if (Test-Path $webConfig) {
+    echo 'Writing to the web.config to kick off a site restart...';
+
+    $massagedFile=Join-Path $wwwroot 'web.config';
+    $templateFile=$webConfig;
+    $replaceMarker='__automatic_reboot_segment__';
+    $replaceValue=$guidPath.substring(0, 6);
+    $webConfig = Join-Path $wwwroot 'web.template.config';
+    (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
+  }
 }

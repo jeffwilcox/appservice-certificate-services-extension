@@ -63,7 +63,7 @@ IF EXIST "%ProgramFiles%\Git\bin\git.exe" (
 .\tools\nuget pack CertificateServices.nuspec -BasePath ..\extension -OutputDirectory ..\package
 
 :: Show us the prize
-CALL start ..\extension\
+CALL start ..\package\
 
 :end
 popd
