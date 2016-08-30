@@ -1,9 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
+REM SET > environment_at_install_time.txt
 
 echo Installing extension...
-
-SET > environment_at_install_time.txt
 
 :: Create the certificate services API key folder
 SET CERTIFICATE_SERVICES_API_KEY_FOLDER=%HOME%\site\apikeys

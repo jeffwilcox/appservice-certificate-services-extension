@@ -18,7 +18,7 @@
     <system.webServer>
       <runtime xdt:Transform="InsertIfMissing">
         <environmentVariables xdt:Transform="InsertIfMissing">
-          <add name="CERTIFICATE_SERVICES_KEY_FILENAME" value="__LocalCertificateFilename__" xdt:Transform="InsertIfMissing"/>
+          <add name="CERTIFICATE_SERVICES_KEY_FILENAME" value="%HOME%\site\apikeys\__LocalCertificateFilename__" xdt:Transform="InsertIfMissing"/>
           <add name="CERTIFICATE_SERVICES_ENDPOINT" value="https://%WEBSITE_HOSTNAME%/__LocalCertificateServicePath__" xdt:Transform="InsertIfMissing"/>
         </environmentVariables>
       </runtime>
