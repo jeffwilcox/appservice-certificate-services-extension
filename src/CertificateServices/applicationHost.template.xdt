@@ -8,7 +8,7 @@
         </application>
       </site>
       <site name="%XDT_SCMSITENAME%" xdt:Locator="Match(name)">
-        <application path="/certificates" applicationPool="%XDT_SCMSITENAME%" xdt:Transform="Insert">
+        <application path="/CertificateServices" applicationPool="%XDT_SCMSITENAME%" xdt:Transform="Insert">
           <virtualDirectory path="/" physicalPath="__LocalDeveloperCertificateServicePhysicalPath__" />
         </application>
       </site>
