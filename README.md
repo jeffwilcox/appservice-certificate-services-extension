@@ -7,11 +7,15 @@ This extension also includes an Advanced Tools endpoint for retrieving informati
 about any certificates available for use by the application, including a REST API
 endpoint.
 
-## Web Site - Local Authorization Token Service
+## Web Service - Local Authorization Token Service
 
 > TBD
 
-## Developer - Advanced Tools
+## Application - Local Authorization Process
+
+> TBD
+
+## Developer Tools
 
 > TBD
 
