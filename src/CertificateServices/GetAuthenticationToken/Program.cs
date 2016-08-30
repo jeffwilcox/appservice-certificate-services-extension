@@ -11,12 +11,7 @@ namespace GetAuthenticationToken
     {
         static void Main(string[] args)
         {
-            AppService.CertificateServices.Models.CertificatesRepository cr = new AppService.CertificateServices.Models.CertificatesRepository();
-            foreach (var certInfo in cr.GetAllValid(true))
-            {
-                Console.WriteLine(certInfo.Thumbprint);
-            }
-
+            CertificatesRepository certificates = new CertificatesRepository();
             if (args.Length < 4)
             {
                 throw new InvalidOperationException("Not enough arguments specified: [app] thumbprints tenantId clientId resource");
@@ -29,6 +24,7 @@ namespace GetAuthenticationToken
             string clientId = args[2];
             string resource = args[3];
 
+            var task = AuthenticationHelper.AuthorizeClient(certificates, allowTestCertificates, thumbprints, tenantId, clientId, resource);
 
         }
     }
