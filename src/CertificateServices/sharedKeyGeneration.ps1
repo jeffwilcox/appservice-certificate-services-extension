@@ -37,7 +37,7 @@ $isPrivateExtensionDeployment = [string]::IsNullOrEmpty($appServiceExtensionPath
 
 $localServicePhysicalPath = '%XDT_EXTENSIONPATH%';
 if ($isPrivateExtensionDeployment -eq '1') {
-  $localServicePhysicalPath = '%HOME%\site\wwwroot\src\Certificates';
+  $localServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\Certificates';
 }
 
 $templateFile=$massagedFile;
@@ -62,9 +62,14 @@ if ($isPrivateExtensionDeployment -eq '1') {
   $wwwroot = '..\..\app\';
 }
 
-$webConfig = Join-Path $wwwroot 'web.config';
+$webConfig = Join-Path $wwwroot 'web.template.config';
 if (Test-Path $webConfig) {
   echo 'Writing to the web.config to kick off a site restart...';
-  $extraContent = '<!--' + $guidPath.substring(0, 6) + '-->';
-  Add-Content $webConfig $extraContent;
+
+  $massagedFile=Join-Path $wwwroot 'web.config';
+  $templateFile=$webConfig;
+  $replaceMarker='__automatic_reboot_segment__';
+  $replaceValue=$guidPath.substring(0, 6);
+  $webConfig = Join-Path $wwwroot 'web.template.config';
+  (Get-Content $templateFile | out-string).Replace($replaceMarker, $replaceValue) | Set-Content $massagedFile;
 }
