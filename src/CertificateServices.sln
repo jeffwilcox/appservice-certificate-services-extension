@@ -16,6 +16,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationHost", "Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetAuthenticationToken", "CertificateServices\GetAuthenticationToken\GetAuthenticationToken.csproj", "{A7BB1DC6-FCBF-4E59-8B1F-081950FF3C0C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppServiceExtension", "AppServiceExtension", "{CCD626A6-E62C-4569-A23E-AE15F5488298}"
+	ProjectSection(SolutionItems) = preProject
+		CertificateServices\install.cmd = CertificateServices\install.cmd
+		CertificateServices\sharedKeyGeneration.ps1 = CertificateServices\sharedKeyGeneration.ps1
+		CertificateServices\uninstall.cmd = CertificateServices\uninstall.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrivateExtensionTesting", "PrivateExtensionTesting", "{98B12873-8077-402A-9153-A90E0A0D9FEC}"
+	ProjectSection(SolutionItems) = preProject
+		..\deploy.cmd = ..\deploy.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
