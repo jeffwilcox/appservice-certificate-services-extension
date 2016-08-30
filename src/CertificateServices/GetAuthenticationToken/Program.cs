@@ -1,4 +1,5 @@
 ﻿using AppService.CertificateServices;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace GetAuthenticationToken
 {
     class Program
     {
+        private readonly static TimeSpan TimeoutMaximum = TimeSpan.FromSeconds(15);
+
         static void Main(string[] args)
         {
             CertificatesRepository certificates = new CertificatesRepository();
@@ -25,7 +28,10 @@ namespace GetAuthenticationToken
             string resource = args[3];
 
             var task = AuthenticationHelper.AuthorizeClient(certificates, allowTestCertificates, thumbprints, tenantId, clientId, resource);
+            task.Wait(TimeoutMaximum);
 
+            var result = task.Result;
+            Console.WriteLine(JsonConvert.SerializeObject(result));
         }
     }
 }
