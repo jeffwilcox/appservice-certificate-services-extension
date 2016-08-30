@@ -24,7 +24,7 @@ namespace AppService.CertificateServices
 
             config.Routes.MapHttpRoute(
                 name: "CertificatesRoute",
-                routeTemplate: "/{thumbprints}",
+                routeTemplate: "{thumbprints}",
                 defaults: new
                 {
                     controller = "Certificates",
