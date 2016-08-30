@@ -1,5 +1,6 @@
 @echo off
 SET THIS_DIRECTORY=%~dp0
+pushd %THIS_DIRECTORY%
 echo Building and packaging extension...
 
 SET EXTENSION_BUILD_LOCAL=..\extension
@@ -8,8 +9,8 @@ IF NOT EXIST .\tools (
   MKDIR .\tools
 )
 
-IF NOT EXIST .\extension (
-  MKDIR .\extension
+IF EXIST ..\package (
+  rd /s /q ..\package
 )
 
 IF NOT EXIST .\tools\nuget.exe (
@@ -21,6 +22,15 @@ IF EXIST "%EXTENSION_BUILD_LOCAL%\README.md" (
   echo Cleaning previous build...
   RD /S /Q %EXTENSION_BUILD_LOCAL%
 )
+
+IF NOT EXIST "%EXTENSION_BUILD_LOCAL%" (
+  MKDIR "%EXTENSION_BUILD_LOCAL%"
+)
+
+IF NOT EXIST ..\package (
+  MKDIR ..\package
+)
+
 CALL "build-extension.cmd"
 
 echo.
@@ -38,6 +48,22 @@ COPY "%THIS_DIRECTORY%CertificateServices\applicationHost.template.xdt" "%EXTENS
 COPY "%THIS_DIRECTORY%..\README.md" "%EXTENSION_BUILD_LOCAL%\"
 COPY "%THIS_DIRECTORY%..\LICENSE" "%EXTENSION_BUILD_LOCAL%\"
 
+:: What Git commit is this?
+:: * Assumes that this project is being built from a cloned Git repo
+IF EXIST "%ProgramFiles(x86)%\Git\bin\git.exe" (
+  "%ProgramFiles(x86)%\Git\bin\git.exe" rev-parse HEAD >> "%EXTENSION_BUILD_LOCAL%\commit.txt"
+  "%ProgramFiles(x86)%\Git\bin\git.exe" remote get-url origin >> "%EXTENSION_BUILD_LOCAL%\repo.txt"
+)
+IF EXIST "%ProgramFiles%\Git\bin\git.exe" (
+  "%ProgramFiles%\Git\bin\git.exe" rev-parse HEAD >> "%EXTENSION_BUILD_LOCAL%\commit.txt"
+  "%ProgramFiles%\Git\bin\git.exe" remote get-url origin >> "%EXTENSION_BUILD_LOCAL%\repo.txt"
+)
 
-REM .\tools\nuget pack .\*.nuspec -BasePath .\build -OutputDirectory ..\extension
-REM start ..\extension\
+:: Package up the extension
+.\tools\nuget pack CertificateServices.nuspec -BasePath ..\extension -OutputDirectory ..\package
+
+:: Show us the prize
+CALL start ..\extension\
+
+:end
+popd
