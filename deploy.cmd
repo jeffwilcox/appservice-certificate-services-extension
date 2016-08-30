@@ -110,7 +110,9 @@ goto :EOF
 echo Private extension building and installing app services...
 
 :: 1. Build the private extension
+pushd .\src
 CALL .\src\build-extension.cmd
+popd
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Run extension uninstall/install

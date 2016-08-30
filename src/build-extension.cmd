@@ -50,12 +50,9 @@ SET CERTIFICATE_SERVICE_CONSOLE_PROJECT=%CERTIFICATE_SERVICE_DIRECTORY%GetAuthen
 SET CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT=1
 
 :: 1. Restore NuGet packages
-IF /I "%CERTIFICATE_SERVICE_PACKAGES%" NEQ "" (
-  call :ExecuteCmd %NUGETCOMMAND% restore "%CERTIFICATE_SERVICE_SOLUTION%"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
-
-:: quick/brute msbuilds
+echo call :ExecuteCmd %NUGETCOMMAND% restore "%CERTIFICATE_SERVICE_SOLUTION%"
+call :ExecuteCmd %NUGETCOMMAND% restore "%CERTIFICATE_SERVICE_SOLUTION%"
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build to the temporary path - certificate service
 echo.
