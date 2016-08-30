@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 using System.Web.Http;
 
 namespace AppService.CertificateServices.Certificates.Controllers
@@ -20,11 +21,22 @@ namespace AppService.CertificateServices.Certificates.Controllers
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(string.Format("IsLocal", Request.IsLocal()));
+            sb.AppendLine(string.Format("IsLocal", Request.IsLocal().ToString()));
 
             foreach (var prop in Request.Properties)
             {
                 sb.AppendLine(string.Format("Property: {0}={1}", prop.Key, prop.Value.ToString()));
+                if (prop.Value.ToString() == "MS_HttpContext")
+                {
+                    var ctx = prop.Value as HttpContextWrapper;
+                    if (ctx != null)
+                    {
+                        var ip = ctx.Request.UserHostAddress;
+                        sb.AppendLine("IP: " + ip.ToString());
+
+                        sb.AppendLine("ILocal: " + ctx.Request.IsLocal.ToString());
+                    }
+                }
             }
 
             return sb.ToString();
