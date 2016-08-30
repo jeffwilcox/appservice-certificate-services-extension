@@ -44,12 +44,6 @@ namespace AppService.CertificateServices
             return null;
         }
 
-        public override Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
-        {
-            OnAuthorization(actionContext);
-            return null;
-        }
-
         public override void OnAuthorization(HttpActionContext actionContext)
         {
             bool ok = false;
@@ -76,13 +70,14 @@ namespace AppService.CertificateServices
             {
                 ok = false;
             }
-            if (!ok)
+            if (ok == true)
             {
-                throw new HttpResponseException(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.NotFound,
-                });
+                return;
             }
+            throw new HttpResponseException(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NotFound,
+            });
         }
     }
 }
