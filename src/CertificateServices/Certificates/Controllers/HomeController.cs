@@ -16,10 +16,35 @@ namespace AppService.CertificateServices.Certificates.Controllers
 {
     public class HomeController : ApiController
     {
+        private string GetClientIp(HttpRequestMessage request = null)
+        {
+            request = request ?? Request;
+
+            if (request.Properties.ContainsKey("MS_HttpContext"))
+            {
+                return ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request.UserHostAddress;
+            }
+//            else if (request.Properties.ContainsKey(RemoteEndpointMessageProperty.Name))
+  //          {
+    //            RemoteEndpointMessageProperty prop = (RemoteEndpointMessageProperty)request.Properties[RemoteEndpointMessageProperty.Name];
+      //          return prop.Address;
+        //    }
+            else if (HttpContext.Current != null)
+            {
+                return HttpContext.Current.Request.UserHostAddress;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         // GET /
         public string Get()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine(GetClientIp(Request));
+
             foreach (var prop in Request.Properties)
             {
                 //sb.AppendLine(string.Format("Property: {0}={1}", prop.Key, prop.Value.ToString()));
