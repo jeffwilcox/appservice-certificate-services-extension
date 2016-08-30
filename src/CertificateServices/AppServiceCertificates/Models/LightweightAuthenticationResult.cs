@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace AppService.CertificateServices.CertificateService.Models
+namespace AppService.CertificateServices.Models
 {
     public class LightweightAuthenticationResult
     {
