@@ -35,7 +35,12 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 :: Certificates Extension
 :: ------------------
 
-SET CERTIFICATE_SERVICE_DIRECTORY=CertificateServices\
+SET CERTIFICATES_SERVICE_NAME=Certificates
+SET CERTIFICATE_SERVICE_NAME=CertificateServices
+SET CERTIFICATE_TOKEN_GENERATION_APP_NAME=GetAuthenticationToken
+SET CERTIFICATE_TOKEN_GENERATION_APP_DIRECTORY=Tools
+
+SET CERTIFICATE_SERVICE_DIRECTORY=%CERTIFICATE_SERVICE_NAME%\
 SET CERTIFICATE_SERVICE_SOLUTION=CertificateServices.sln
 
 SET CERTIFICATE_SERVICE_PACKAGES=%CERTIFICATE_SERVICE_DIRECTORY%packages.config
@@ -50,27 +55,43 @@ IF /I "%CERTIFICATE_SERVICE_PACKAGES%" NEQ "" (
   IF !ERRORLEVEL! NEQ 0 goto error
 )
 
+:: quick/brute msbuilds
+
 :: 2. Build to the temporary path - certificate service
-IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+echo.
+echo Building %CERTIFICATE_SERVICE_NAME%
+IF DEFINED EXTENSION_BUILD_FOLDER (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:WebFileSystemPublish /p:webpublishmethod=filesystem /p:Configuration=Release /p:UseSharedCompilation=false /p:PublishUrl=%EXTENSION_BUILD_FOLDER%\%CERTIFICATE_SERVICE_NAME%
 ) ELSE (
-  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
+    call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  ) ELSE (
+    call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  )
 )
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. Build to the temporary path - certificates
-IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATES_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+echo.
+echo Building %CERTIFICATES_SERVICE_NAME%
+IF DEFINED EXTENSION_BUILD_FOLDER (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATES_PROJECT%" /nologo /verbosity:m /t:WebFileSystemPublish /p:webpublishmethod=filesystem /p:Configuration=Release /p:UseSharedCompilation=false /p:PublishUrl=%EXTENSION_BUILD_FOLDER%\%CERTIFICATES_SERVICE_NAME%
 ) ELSE (
-  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATES_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
+    call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATES_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  ) ELSE (
+    call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATES_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  )
 )
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 4. Build the console app
-IF /I "%CERTIFICATE_SERVICE_IN_PLACE_DEPLOYMENT%" NEQ "1" (
-  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_CONSOLE_PROJECT%" /nologo /verbosity:m /t:Build /t:pipelinePreDeployCopyAllFilesToOneFolder /p:_PackageTempDir="%DEPLOYMENT_TEMP%";AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+echo.
+echo Building %CERTIFICATE_TOKEN_GENERATION_APP_NAME%
+IF DEFINED EXTENSION_BUILD_FOLDER (
+  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_CONSOLE_PROJECT%" /nologo /verbosity:m /t:Rebuild /p:OutputPath=%EXTENSION_BUILD_FOLDER%\%CERTIFICATE_TOKEN_GENERATION_APP_DIRECTORY%;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
 ) ELSE (
-  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_CONSOLE_PROJECT%" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
+  call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_CONSOLE_PROJECT%" /nologo /verbosity:m /t:Build /p:Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%
 )
 IF !ERRORLEVEL! NEQ 0 goto error
 
