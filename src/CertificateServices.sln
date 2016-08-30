@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrivateExtensionTesting", "PrivateExtensionTesting", "{98B12873-8077-402A-9153-A90E0A0D9FEC}"
 	ProjectSection(SolutionItems) = preProject
 		..\deploy.cmd = ..\deploy.cmd
+		..\app\web.template.config = ..\app\web.template.config
 	EndProjectSection
 EndProject
 Global
