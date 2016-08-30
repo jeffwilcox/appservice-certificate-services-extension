@@ -16,10 +16,11 @@ using AppService.CertificateServices.Models;
 
 namespace AppService.CertificateServices.CertificateService.Controllers
 {
+#if !KUDU_CERTIFICATES_PROJECT
+    [LocalApiKeyAttribute]
+#endif
     public class CertificatesController : ApiController
     {
-        private const string MicrosoftOnlineAuthorityEndpoint = "https://login.microsoftonline.com/{0}";
-        
         private CertificatesRepository certificates;
 
         public CertificatesController()
