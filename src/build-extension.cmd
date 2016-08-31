@@ -54,7 +54,6 @@ call :ExecuteCmd %NUGETCOMMAND% restore "%CERTIFICATE_SERVICE_SOLUTION%"
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build to the temporary path - certificate service
-echo.
 echo Building %CERTIFICATE_SERVICE_NAME%
 IF DEFINED EXTENSION_BUILD_FOLDER (
   call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_PROJECT%" /nologo /verbosity:m /t:WebFileSystemPublish /p:webpublishmethod=filesystem /p:Configuration=Release /p:UseSharedCompilation=false /p:PublishUrl=%EXTENSION_BUILD_FOLDER%\%CERTIFICATE_SERVICE_NAME%
@@ -68,7 +67,6 @@ IF DEFINED EXTENSION_BUILD_FOLDER (
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 3. Build to the temporary path - certificates
-echo.
 echo Building %CERTIFICATES_SERVICE_NAME%
 IF DEFINED EXTENSION_BUILD_FOLDER (
   call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATES_PROJECT%" /nologo /verbosity:m /t:WebFileSystemPublish /p:webpublishmethod=filesystem /p:Configuration=Release /p:UseSharedCompilation=false /p:PublishUrl=%EXTENSION_BUILD_FOLDER%\%CERTIFICATES_SERVICE_NAME%
@@ -82,7 +80,6 @@ IF DEFINED EXTENSION_BUILD_FOLDER (
 IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 4. Build the console app
-echo.
 echo Building %CERTIFICATE_TOKEN_GENERATION_APP_NAME%
 IF DEFINED EXTENSION_BUILD_FOLDER (
   call :ExecuteCmd "%MSBUILD_PATH%" "%CERTIFICATE_SERVICE_CONSOLE_PROJECT%" /nologo /verbosity:m /t:Rebuild /p:OutputPath=%EXTENSION_BUILD_FOLDER%\%CERTIFICATE_TOKEN_GENERATION_APP_DIRECTORY%;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%CERTIFICATE_SERVICE_DIRECTORY%" %SCM_BUILD_ARGS%

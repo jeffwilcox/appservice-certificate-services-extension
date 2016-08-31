@@ -50,6 +50,8 @@ namespace AppService.CertificateServices
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+            return;
+            //
             bool ok = false;
 
             try

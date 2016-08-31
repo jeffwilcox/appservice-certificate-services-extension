@@ -13,7 +13,7 @@ namespace AppService.CertificateServices
 {
     public class AllowTestCertificatesSetting
     {
-        private const string AllowTestCertificatesEnvironmentVariable = "WEBSITE_CERTIFICATE_SERVICE_ALLOW_TEST_CERTIFICATES";
+        private const string AllowTestCertificatesEnvironmentVariable = "CERTIFICATE_SERVICES_ALLOW_TEST_CERTIFICATES";
         private const string TurnOffEnvironmentValue = "0";
         private const bool AllowTestCertificatesDefaultValue = true;
 

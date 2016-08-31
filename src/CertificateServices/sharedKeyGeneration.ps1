@@ -35,7 +35,7 @@ $replaceValue=$guidPath;
 $appServiceExtensionPath = $Env:WEBSITE_SKU;
 $isPrivateExtensionDeployment = [string]::IsNullOrEmpty($appServiceExtensionPath);
 
-$localServicePhysicalPath = '%XDT_EXTENSIONPATH%\CertificateService';
+$localServicePhysicalPath = '%XDT_EXTENSIONPATH%\CertificateServices';
 if ($isPrivateExtensionDeployment) {
   $localServicePhysicalPath = '%HOME%\site\wwwroot\src\CertificateServices\CertificateService';
 }

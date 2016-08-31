@@ -17,7 +17,6 @@ namespace AppService.CertificateServices
     {
         internal readonly static object AllowTestCertificatesKey = new object();
 
-
         public static void Register(HttpConfiguration config)
         {
             // Only requests with local system knowledge via a shared key are allowed
@@ -32,11 +31,11 @@ namespace AppService.CertificateServices
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "Home",
-                routeTemplate: "",
-               defaults: new { controller = "Home" }
-           );
+            //config.Routes.MapHttpRoute(
+            //    name: "Home",
+            //    routeTemplate: "",
+            //   defaults: new { controller = "Home" }
+            //);
 
             config.Routes.MapHttpRoute(
                 name: "TokensActionRoute",
