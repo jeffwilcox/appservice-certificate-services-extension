@@ -105,6 +105,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AllowLocalService.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\TokensController.cs" />
     <Compile Include="Controllers\CertificatesController.cs" />

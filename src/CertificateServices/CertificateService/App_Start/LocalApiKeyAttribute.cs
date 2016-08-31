@@ -61,7 +61,7 @@ namespace AppService.CertificateServices
                 }
 
                 IEnumerable<string> values;
-                if (actionContext.Request.Headers.TryGetValues(AuthorizationHeader, out values))
+                if (AllowLocalService.AllowLocalCertificateService && actionContext.Request.Headers.TryGetValues(AuthorizationHeader, out values))
                 {
                     string first = values.FirstOrDefault();
                     if (first != null && first.Substring(AuthorizationBearerTokenPrefix.Length) == sharedApiKey)

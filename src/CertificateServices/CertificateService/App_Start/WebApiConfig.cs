@@ -37,25 +37,27 @@ namespace AppService.CertificateServices
             //   defaults: new { controller = "Home" }
             //);
 
-            config.Routes.MapHttpRoute(
-                name: "TokensActionRoute",
-                routeTemplate: "certificates/{thumbprints}/tenant/{tenantId}/client/{clientId}/resource/{resource}/authenticate",
-                defaults: new
-                {
-                    controller = "Tokens",
-                    action = "AuthorizeClient",
-                }
-            );
-
-            config.Routes.MapHttpRoute(
-                name: "CertificatesRoute",
-                routeTemplate: "certificates/{thumbprints}",
-                defaults: new
-                {
-                    controller = "Certificates",
-                    thumbprints = RouteParameter.Optional,
-                }
-            );
+            if (AllowLocalService.AllowLocalCertificateService)
+            {
+                config.Routes.MapHttpRoute(
+                    name: "TokensActionRoute",
+                    routeTemplate: "certificates/{thumbprints}/tenant/{tenantId}/client/{clientId}/resource/{resource}/authorize",
+                    defaults: new
+                    {
+                        controller = "Tokens",
+                        action = "AuthorizeClient",
+                    }
+                );
+                config.Routes.MapHttpRoute(
+                    name: "CertificatesRoute",
+                    routeTemplate: "certificates/{thumbprints}",
+                    defaults: new
+                    {
+                        controller = "Certificates",
+                        thumbprints = RouteParameter.Optional,
+                    }
+                );
+            }
         }
     }
 }

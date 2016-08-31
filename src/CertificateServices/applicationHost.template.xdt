@@ -35,8 +35,8 @@
     <system.webServer>
       <runtime xdt:Transform="InsertIfMissing">
         <environmentVariables xdt:Transform="InsertIfMissing">
-          <add name="CERTIFICATE_SERVICES_KEY_FILENAME" value="[secret value]" xdt:Transform="InsertIfMissing"/>
-          <add name="CERTIFICATE_SERVICES_ENDPOINT" value="https://%WEBSITE_HOSTNAME%/__LocalCertificateServicePath__" xdt:Transform="InsertIfMissing"/>
+          <add name="CERTIFICATE_SERVICES_KEY_FILENAME" value="[redacted file]" xdt:Transform="InsertIfMissing"/>
+          <add name="CERTIFICATE_SERVICES_ENDPOINT" value="[redacted endpoint]" xdt:Transform="InsertIfMissing"/>
         </environmentVariables>
       </runtime>
     </system.webServer>
