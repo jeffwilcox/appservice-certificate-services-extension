@@ -3,9 +3,10 @@
     <metadata>
         <id>CertificateServices</id>
         <title>Certificate Services</title>
-        <version>0.0.65</version>
+        <version>0.0.66</version>
         <description>Integrate applications with Azure Active Directory certificate-based authentication using a local tool and/or API.</description>
-        <authors>jeffwilcox</authors>
+        <authors>Jeff Wilcox</authors>
+        <owners>Jeff Wilcox</owners>
         <licenseUrl>https://github.com/jeffwilcox/appservice-certificate-services-extension/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/jeffwilcox/appservice-certificate-services-extension</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>

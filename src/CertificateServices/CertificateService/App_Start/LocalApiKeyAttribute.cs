@@ -22,7 +22,7 @@ namespace AppService.CertificateServices
     public class LocalApiKeyAttribute : AuthorizationFilterAttribute
     {
         private const string AppServiceHome = "HOME";
-        private const string CertificateServiceLocalApiKeyFilename = "CERTIFICATE_LOCAL_SERVICE_FILENAME";
+        private const string CertificateServiceLocalApiKeyFilename = "CERTIFICATE_SERVICES_KEY_FILENAME";
 
         private const string AuthorizationHeader = "Authorization";
         private const string AuthorizationBearerTokenPrefix = "Bearer ";
@@ -30,6 +30,10 @@ namespace AppService.CertificateServices
         private string GetSharedApiKey()
         {
             string apiKeyFilename = Environment.GetEnvironmentVariable(CertificateServiceLocalApiKeyFilename);
+            if (File.Exists(apiKeyFilename))
+            {
+                return File.ReadAllText(apiKeyFilename).Trim();
+            }
             string siteRoot = Environment.GetEnvironmentVariable(AppServiceHome);
             if (string.IsNullOrWhiteSpace(apiKeyFilename) || string.IsNullOrWhiteSpace(siteRoot))
             {
